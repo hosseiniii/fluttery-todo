@@ -57,5 +57,5 @@ MIT
 
 ---
 
-> GitHub [@sabinbajracharya](https://github.com/hosseiniii) &nbsp;&middot;&nbsp;
+> GitHub [@hosseiniii](https://github.com/hosseiniii) &nbsp;&middot;&nbsp;
 
