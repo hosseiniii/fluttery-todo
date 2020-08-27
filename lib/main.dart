@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:shamsi_date/shamsi_date.dart';
 
 import 'package:todo/scopedmodel/todo_list_model.dart';
 import 'package:todo/gradient_background.dart';
@@ -9,11 +10,11 @@ import 'package:todo/model/hero_id_model.dart';
 import 'package:todo/model/task_model.dart';
 import 'package:todo/route/scale_route.dart';
 import 'package:todo/utils/color_utils.dart';
-import 'package:todo/utils/datetime_utils.dart';
 import 'package:todo/page/detail_screen.dart';
 import 'package:todo/component/todo_badge.dart';
 import 'package:todo/page/privacy_policy.dart';
 import 'package:todo/model/data/choice_card.dart';
+import 'package:todo/utils/number_utils.dart';
 
 void main() => runApp(MyApp());
 
@@ -26,11 +27,18 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
         textTheme: TextTheme(
-          headline: TextStyle(fontSize: 32.0, fontWeight: FontWeight.w400),
-          title: TextStyle(fontSize: 28.0, fontWeight: FontWeight.w500),
+          headline: TextStyle(
+            fontSize: 32.0,
+            fontFamily: 'Anjoman',
+          ),
+          title: TextStyle(
+            fontSize: 28.0,
+            fontWeight: FontWeight.w700,
+            fontFamily: 'Anjoman',
+          ),
           body1: TextStyle(
-            fontSize: 14.0,
-            fontFamily: 'Hind',
+            fontSize: 16.0,
+            fontFamily: 'Anjoman',
           ),
         ),
       ),
@@ -58,9 +66,9 @@ class MyHomePage extends StatefulWidget {
     );
   }
 
-  String currentDay(BuildContext context) {
-
-    return DateTimeUtils.currentDay;
+  JalaliFormatter currentDay(BuildContext context) {
+    Jalali jalali = Jalali.now();
+    return jalali.formatter;
   }
 
   @override
@@ -102,131 +110,149 @@ class _MyHomePageState extends State<MyHomePage>
       }
       return GradientBackground(
         color: backgroundColor,
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            title: Text(widget.title),
-            centerTitle: true,
-            elevation: 0.0,
+        child: Directionality(
+          textDirection: TextDirection.rtl,
+          child: Scaffold(
             backgroundColor: Colors.transparent,
-            actions: [
-              PopupMenuButton<Choice>(
-                onSelected: (choice) {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          PrivacyPolicyScreen()));
-                },
-                itemBuilder: (BuildContext context) {
-                  return choices.map((Choice choice) {
-                    return PopupMenuItem<Choice>(
-                      value: choice,
-                      child: Text(choice.title),
-                    );
-                  }).toList();
-                },
-              ),
-            ],
-          ),
-          body: _isLoading
-              ? Center(
-                  child: CircularProgressIndicator(
-                    strokeWidth: 1.0,
-                    valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
-                  ),
-                )
-              : FadeTransition(
-                  opacity: _animation,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(top: 0.0, left: 56.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            // ShadowImage(),
-                            Container(
-                              // margin: EdgeInsets.only(top: 22.0),
-                              child: Text(
-                                '${widget.currentDay(context)}',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline
-                                    .copyWith(color: Colors.white),
-                              ),
+            appBar: AppBar(
+              title: Text(widget.title),
+              centerTitle: true,
+              elevation: 0.0,
+              backgroundColor: Colors.transparent,
+              actions: [
+                PopupMenuButton<Choice>(
+                  onSelected: (choice) {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            PrivacyPolicyScreen()));
+                  },
+                  itemBuilder: (BuildContext context) {
+                    return choices.map((Choice choice) {
+                      return PopupMenuItem<Choice>(
+                        value: choice,
+                        child: Text(choice.title),
+                      );
+                    }).toList();
+                  },
+                ),
+              ],
+            ),
+            body: _isLoading
+                ? Center(
+                    child: CircularProgressIndicator(
+                      strokeWidth: 1.0,
+                      valueColor:
+                          new AlwaysStoppedAnimation<Color>(Colors.white),
+                    ),
+                  )
+                : FadeTransition(
+                    opacity: _animation,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Directionality(
+                          textDirection: TextDirection.rtl,
+                          child: Container(
+                            margin: EdgeInsets.only(top: 0.0, right: 56.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                // ShadowImage(),
+                                Container(
+                                  // margin: EdgeInsets.only(top: 22.0),
+                                  child: Text(
+                                    '${widget.currentDay(context).wN}',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline
+                                        .copyWith(color: Colors.white),
+                                  ),
+                                ),
+                                Text(
+                                  '${NumberUtils.replaceFarsiNumber(widget.currentDay(context).d)} ${widget.currentDay(context).mN}',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .title
+                                      .copyWith(
+                                          color: Colors.white.withOpacity(0.7)),
+                                ),
+                                Container(height: 16.0),
+                                Text(
+                                  'شما  ${NumberUtils.replaceFarsiNumber(_todos.where((todo) => todo.isCompleted == 0).length.toString())}  کار انجام نشده دارید',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .body1
+                                      .copyWith(
+                                          color: Colors.white.withOpacity(0.7)),
+                                ),
+                                Container(
+                                  height: 16.0,
+                                )
+                                // Container(
+                                //   margin: EdgeInsets.only(top: 42.0),
+                                //   child: Text(
+                                //     'TODAY : FEBURARY 13, 2019',
+                                //     style: Theme.of(context)
+                                //         .textTheme
+                                //         .subtitle
+                                //         .copyWith(color: Colors.white.withOpacity(0.8)),
+                                //   ),
+                                // ),
+                              ],
                             ),
-                            Text(
-                              '${DateTimeUtils.currentDate} ${DateTimeUtils.currentMonth}',
-                              style: Theme.of(context).textTheme.title.copyWith(
-                                  color: Colors.white.withOpacity(0.7)),
-                            ),
-                            Container(height: 16.0),
-                            Text(
-                              'You have ${_todos.where((todo) => todo.isCompleted == 0).length} tasks to complete',
-                              style: Theme.of(context).textTheme.body1.copyWith(
-                                  color: Colors.white.withOpacity(0.7)),
-                            ),
-                            Container(
-                              height: 16.0,
-                            )
-                            // Container(
-                            //   margin: EdgeInsets.only(top: 42.0),
-                            //   child: Text(
-                            //     'TODAY : FEBURARY 13, 2019',
-                            //     style: Theme.of(context)
-                            //         .textTheme
-                            //         .subtitle
-                            //         .copyWith(color: Colors.white.withOpacity(0.8)),
-                            //   ),
-                            // ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        key: _backdropKey,
-                        flex: 1,
-                        child: NotificationListener<ScrollNotification>(
-                          onNotification: (notification) {
-                            if (notification is ScrollEndNotification) {
-                              print(
-                                  "ScrollNotification = ${_pageController.page}");
-                              var currentPage =
-                                  _pageController.page.round().toInt();
-                              if (_currentPageIndex != currentPage) {
-                                setState(() => _currentPageIndex = currentPage);
-                              }
-                            }
-                          },
-                          child: PageView.builder(
-                            controller: _pageController,
-                            itemBuilder: (BuildContext context, int index) {
-                              if (index == _tasks.length) {
-                                return AddPageCard(
-                                  color: Colors.blueGrey,
-                                );
-                              } else {
-                                return TaskCard(
-                                  backdropKey: _backdropKey,
-                                  color: ColorUtils.getColorFrom(
-                                      id: _tasks[index].color),
-                                  getHeroIds: widget._generateHeroIds,
-                                  getTaskCompletionPercent:
-                                      model.getTaskCompletionPercent,
-                                  getTotalTodos: model.getTotalTodosFrom,
-                                  task: _tasks[index],
-                                );
-                              }
-                            },
-                            itemCount: _tasks.length + 1,
                           ),
                         ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(bottom: 32.0),
-                      ),
-                    ],
+                        Expanded(
+                          key: _backdropKey,
+                          flex: 1,
+                          child: NotificationListener<ScrollNotification>(
+                            onNotification: (notification) {
+                              if (notification is ScrollEndNotification) {
+                                print(
+                                    "ScrollNotification = ${_pageController.page}");
+                                var currentPage =
+                                    _pageController.page.round().toInt();
+                                if (_currentPageIndex != currentPage) {
+                                  setState(
+                                      () => _currentPageIndex = currentPage);
+                                }
+                              }
+                            },
+                            child: Directionality(
+                              textDirection: TextDirection.rtl,
+                              child: PageView.builder(
+                                controller: _pageController,
+                                physics: BouncingScrollPhysics(),
+                                itemBuilder: (BuildContext context, int index) {
+                                  if (index == _tasks.length) {
+                                    return AddPageCard(
+                                      color: Colors.blueGrey,
+                                    );
+                                  } else {
+                                    return TaskCard(
+                                      backdropKey: _backdropKey,
+                                      color: ColorUtils.getColorFrom(
+                                          id: _tasks[index].color),
+                                      getHeroIds: widget._generateHeroIds,
+                                      getTaskCompletionPercent:
+                                          model.getTaskCompletionPercent,
+                                      getTotalTodos: model.getTotalTodosFrom,
+                                      task: _tasks[index],
+                                    );
+                                  }
+                                },
+                                itemCount: _tasks.length + 1,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(bottom: 32.0),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
+          ),
         ),
       );
     });
@@ -278,8 +304,11 @@ class AddPageCard extends StatelessWidget {
                   height: 8.0,
                 ),
                 Text(
-                  'Add Category',
-                  style: TextStyle(color: color),
+                  'افزودن دسته',
+                  style: TextStyle(
+                    color: color,
+                    fontFamily: 'Anjoman',
+                  ),
                 ),
               ],
             ),
@@ -369,7 +398,7 @@ class TaskCard extends StatelessWidget {
                 child: Hero(
                   tag: heroIds.remainingTaskId,
                   child: Text(
-                    "${getTotalTodos(task)} Task",
+                    "${NumberUtils.replaceFarsiNumber(getTotalTodos(task).toString())}  کار",
                     style: Theme.of(context)
                         .textTheme
                         .body1
@@ -390,9 +419,12 @@ class TaskCard extends StatelessWidget {
               Spacer(),
               Hero(
                 tag: heroIds.progressId,
-                child: TaskProgressIndicator(
-                  color: color,
-                  progress: getTaskCompletionPercent(task),
+                child: Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: TaskProgressIndicator(
+                    color: color,
+                    progress: getTaskCompletionPercent(task),
+                  ),
                 ),
               ),
             ],
