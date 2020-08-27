@@ -304,7 +304,7 @@ class AddPageCard extends StatelessWidget {
                   height: 8.0,
                 ),
                 Text(
-                  'افزودن دسته',
+                  'افزودن دسته‌بندی',
                   style: TextStyle(
                     color: color,
                     fontFamily: 'Anjoman',

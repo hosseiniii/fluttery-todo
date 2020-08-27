@@ -8,5 +8,5 @@ class Choice {
 }
 
 const List<Choice> choices = const <Choice>[
-  const Choice(title: 'Privacy Policy', icon: Icons.vpn_key),
+  const Choice(title: 'شرایط استفاده', icon: Icons.vpn_key),
 ];

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo/utils/number_utils.dart';
 
 class TaskProgressIndicator extends StatelessWidget {
   final Color color;
@@ -19,7 +20,7 @@ class TaskProgressIndicator extends StatelessWidget {
                 children: [
                   Container(
                     height: _height,
-                    color: Colors.grey.withOpacity(0.1),
+                    color: Colors.grey.withOpacity(0.2),
                   ),
                   AnimatedContainer(
                     height: _height,
@@ -33,10 +34,16 @@ class TaskProgressIndicator extends StatelessWidget {
           ),
         ),
         Container(
-          margin: EdgeInsets.only(left: 8.0),
-          child: Text(
-            "$progress%",
-            style: Theme.of(context).textTheme.caption,
+          margin: EdgeInsets.only(right: 8.0),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "% ${NumberUtils.replaceFarsiNumber(progress.toString())}",
+              style: TextStyle(
+                fontFamily: 'Anjoman',
+                fontSize: 14
+              ),
+            ),
           ),
         )
       ],
