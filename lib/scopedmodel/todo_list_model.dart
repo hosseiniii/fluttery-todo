@@ -8,6 +8,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:todo/model/todo_model.dart';
 import 'package:todo/model/task_model.dart';
 import 'package:todo/db/db_provider.dart';
+import 'package:todo/utils/datetime_utils.dart';
 
 class TodoListModel extends Model {
   // ObjectDB db;
@@ -15,7 +16,7 @@ class TodoListModel extends Model {
   List<Todo> get todos => _todos.toList();
   List<Task> get tasks => _tasks.toList();
   int getTaskCompletionPercent(Task task) => _taskCompletionPercentage[task.id];
-  int getTotalTodosFrom(Task task) => todos.where((it) => it.parent == task.id).length;
+  int getTotalTodosFrom(Task task) => todos.where((it) => it.parent == task.id && it.date == DateTimeUtils.selectedDate).length;
   bool get isLoading => _isLoading;
 
   bool _isLoading = false;

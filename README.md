@@ -55,6 +55,11 @@ $ flutter run
 
 MIT
 
+## Font License
+
+Anjoman fonts are considered a proprietary software. To gain information about the laws regarding the use of these fonts, please visit www.fontiran.com
+
+
 ---
 
 > GitHub [@hosseiniii](https://github.com/hosseiniii) &nbsp;&middot;&nbsp;

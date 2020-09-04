@@ -22,7 +22,12 @@ import 'package:todo/utils/number_utils.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     var app = MaterialApp(
@@ -71,7 +76,8 @@ class MyHomePage extends StatefulWidget {
   }
 
   JalaliFormatter currentDay() {
-    Jalali jalali = Jalali.now();
+    List<String> selected = DateTimeUtils.selectedDate.split('/');
+    Jalali jalali = Jalali(int.parse(selected[0]), int.parse(selected[1]), int.parse(selected[2]));
     return jalali.formatter;
   }
 
@@ -109,6 +115,8 @@ class _MyHomePageState extends State<MyHomePage>
             color: color,
             onSelect: (date) {
               DateTimeUtils.selectedDate = date;
+
+              updateValues();
             },
           );
         },
@@ -309,6 +317,10 @@ class _MyHomePageState extends State<MyHomePage>
     _controller.dispose();
     super.dispose();
   }
+
+  void updateValues() {
+
+  }
 }
 
 class AddPageCard extends StatelessWidget {
@@ -367,7 +379,7 @@ class AddPageCard extends StatelessWidget {
 
 typedef TaskGetter<T, V> = V Function(T value);
 
-class TaskCard extends StatelessWidget {
+class TaskCard extends StatefulWidget {
   final GlobalKey backdropKey;
   final Task task;
   final Color color;
@@ -386,12 +398,17 @@ class TaskCard extends StatelessWidget {
   });
 
   @override
+  _TaskCardState createState() => _TaskCardState();
+}
+
+class _TaskCardState extends State<TaskCard> {
+  @override
   Widget build(BuildContext context) {
-    var heroIds = getHeroIds(task);
+    var heroIds = widget.getHeroIds(widget.task);
     return GestureDetector(
       onTap: () {
         final RenderBox renderBox =
-            backdropKey.currentContext.findRenderObject();
+            widget.backdropKey.currentContext.findRenderObject();
         var backDropHeight = renderBox.size.height;
         var bottomOffset = 60.0;
         var horizontalOffset = 52.0;
@@ -404,7 +421,7 @@ class TaskCard extends StatelessWidget {
           ScaleRoute(
             rect: rect,
             widget: DetailScreen(
-              taskId: task.id,
+              taskId: widget.task.id,
               heroIds: heroIds,
             ),
           ),
@@ -431,9 +448,9 @@ class TaskCard extends StatelessWidget {
             children: [
               TodoBadge(
                 id: heroIds.codePointId,
-                codePoint: task.codePoint,
+                codePoint: widget.task.codePoint,
                 color: ColorUtils.getColorFrom(
-                  id: task.color,
+                  id: widget.task.color,
                 ),
               ),
               Spacer(
@@ -444,7 +461,7 @@ class TaskCard extends StatelessWidget {
                 child: Hero(
                   tag: heroIds.remainingTaskId,
                   child: Text(
-                    "${NumberUtils.replaceFarsiNumber(getTotalTodos(task).toString())}  کار",
+                    "${NumberUtils.replaceFarsiNumber(widget.getTotalTodos(widget.task).toString())}  کار",
                     style: Theme.of(context)
                         .textTheme
                         .body1
@@ -455,7 +472,7 @@ class TaskCard extends StatelessWidget {
               Container(
                 child: Hero(
                   tag: heroIds.titleId,
-                  child: Text(task.name,
+                  child: Text(widget.task.name,
                       style: Theme.of(context)
                           .textTheme
                           .title
@@ -468,8 +485,8 @@ class TaskCard extends StatelessWidget {
                 child: Directionality(
                   textDirection: TextDirection.rtl,
                   child: TaskProgressIndicator(
-                    color: color,
-                    progress: getTaskCompletionPercent(task),
+                    color: widget.color,
+                    progress: widget.getTaskCompletionPercent(widget.task),
                   ),
                 ),
               ),
