@@ -17,10 +17,10 @@
 </p>
 
 <p float="left">
-  <img src="screenshots/screen01.png" width="200" />
-  <img src="screenshots/screen02.png" width="200" /> 
-  <img src="screenshots/screen03.png" width="200" />
   <img src="screenshots/screen04.png" width="200" />
+  <img src="screenshots/screen03.png" width="200" /> 
+  <img src="screenshots/screen02.png" width="200" />
+  <img src="screenshots/screen01.png" width="200" />
 </p>
 
 ## Key Features
