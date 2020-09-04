@@ -9,18 +9,20 @@ part 'todo_model.g.dart';
 class Todo {
   final String id, parent;
   final String name;
+  final String date;
   @JsonKey(name: 'completed')
   final int isCompleted;
 
-  Todo(this.name, {
+  Todo(this.name, this.date, {
     @required this.parent,
     this.isCompleted = 0,
     String id
   }): this.id = id ?? Uuid().generateV4();
 
-  Todo copy({String name, int isCompleted, int id, int parent}) {
+  Todo copy({String name, String date, int isCompleted, int id, int parent}) {
     return Todo(
       name ?? this.name,
+      date ?? this.date,
       isCompleted: isCompleted ?? this.isCompleted,
       id: id ?? this.id,
       parent: parent ?? this.parent,

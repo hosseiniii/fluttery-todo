@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:todo/db/db_provider.dart';
 
 import 'package:todo/scopedmodel/todo_list_model.dart';
 import 'package:todo/model/todo_model.dart';
 import 'package:todo/utils/color_utils.dart';
 import 'package:todo/component/todo_badge.dart';
 import 'package:todo/model/hero_id_model.dart';
+import 'package:todo/utils/datetime_utils.dart';
 
 class AddTodoScreen extends StatefulWidget {
   final String taskId;
@@ -168,6 +170,7 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
                     } else {
                       model.addTodo(Todo(
                         newTask,
+                        DateTimeUtils.selectedDate,
                         parent: _task.id,
                       ));
                       Navigator.pop(context);

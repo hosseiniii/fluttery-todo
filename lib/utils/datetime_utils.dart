@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:shamsi_date/shamsi_date.dart';
 
 class DateTimeUtils {
   
@@ -16,5 +17,15 @@ class DateTimeUtils {
     DateTime now = DateTime.now();
     return DateFormat('d').format(now);
   }
+
+  static String getToday () {
+    String today =
+        Jalali.now().year.toString() + "/" +
+        Jalali.now().month.toString() + "/" +
+        Jalali.now().day.toString();
+    return today;
+  }
+
+  static String selectedDate = getToday();
 
 }

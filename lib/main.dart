@@ -1,4 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:shamsi_date/shamsi_date.dart';
 
@@ -14,6 +17,7 @@ import 'package:todo/page/detail_screen.dart';
 import 'package:todo/component/todo_badge.dart';
 import 'package:todo/page/privacy_policy.dart';
 import 'package:todo/model/data/choice_card.dart';
+import 'package:todo/utils/datetime_utils.dart';
 import 'package:todo/utils/number_utils.dart';
 
 void main() => runApp(MyApp());
@@ -66,7 +70,7 @@ class MyHomePage extends StatefulWidget {
     );
   }
 
-  JalaliFormatter currentDay(BuildContext context) {
+  JalaliFormatter currentDay() {
     Jalali jalali = Jalali.now();
     return jalali.formatter;
   }
@@ -96,6 +100,21 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   Widget build(BuildContext context) {
+    void _showDateTimePicker(Color color) {
+      showDialog(
+        context: context,
+        builder: (BuildContext _) {
+          return PersianDateTimePicker(
+            type: 'date',
+            color: color,
+            onSelect: (date) {
+              DateTimeUtils.selectedDate = date;
+            },
+          );
+        },
+      );
+    }
+
     return ScopedModelDescendant<TodoListModel>(
         builder: (BuildContext context, Widget child, TodoListModel model) {
       var _isLoading = model.isLoading;
@@ -161,24 +180,51 @@ class _MyHomePageState extends State<MyHomePage>
                                 Container(
                                   // margin: EdgeInsets.only(top: 22.0),
                                   child: Text(
-                                    '${widget.currentDay(context).wN}',
+                                    '${Jalali(int.parse(DateTimeUtils.selectedDate.split("/")[0]), int.parse(DateTimeUtils.selectedDate.split("/")[1]), int.parse(DateTimeUtils.selectedDate.split("/")[2])).formatter.wN}',
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline
                                         .copyWith(color: Colors.white),
                                   ),
                                 ),
-                                Text(
-                                  '${NumberUtils.replaceFarsiNumber(widget.currentDay(context).d)} ${widget.currentDay(context).mN}',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .title
-                                      .copyWith(
-                                          color: Colors.white.withOpacity(0.7)),
+                                Row(
+                                  children: <Widget>[
+                                    Text(
+                                      '${NumberUtils.replaceFarsiNumber(widget.currentDay().d)} ${widget.currentDay().mN}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .title
+                                          .copyWith(
+                                              color: Colors.white.withOpacity(0.6)),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        _showDateTimePicker(backgroundColor);
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(16.0),
+                                        child: Container(
+                                          padding: EdgeInsets.all(6.0),
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.rectangle,
+                                            border: Border.all(
+                                              color: Colors.white.withOpacity(0.6),
+                                            ),
+                                            borderRadius: BorderRadius.circular(12)
+                                          ),
+                                          child: Icon(
+                                            Icons.edit,
+                                            color: Colors.white.withOpacity(0.7),
+                                            size: 20,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 Container(height: 16.0),
                                 Text(
-                                  'شما  ${NumberUtils.replaceFarsiNumber(_todos.where((todo) => todo.isCompleted == 0).length.toString())}  کار انجام نشده دارید',
+                                  'شما  ${NumberUtils.replaceFarsiNumber(_todos.where((todo) => (todo.isCompleted == 0 && todo.date == DateTimeUtils.selectedDate)).length.toString())}  کار انجام نشده دارید',
                                   style: Theme.of(context)
                                       .textTheme
                                       .body1

@@ -241,7 +241,7 @@ class _DetailScreenState extends State<DetailScreen>
                     ),
                   );
                 },
-                tooltip: 'New Todo',
+                tooltip: 'فعالیت جدید',
                 backgroundColor: _color,
                 foregroundColor: Colors.white,
                 child: Icon(Icons.add),

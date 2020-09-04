@@ -6,6 +6,7 @@ import 'dart:io';
 
 import 'package:todo/model/todo_model.dart';
 import 'package:todo/model/task_model.dart';
+import 'package:todo/utils/datetime_utils.dart';
 
 class DBProvider {
   static Database _database;
@@ -14,12 +15,12 @@ class DBProvider {
   static final DBProvider db = DBProvider._();
 
   var todos = [
-    Todo("سبزیجات", parent: '1',),
-    Todo("کادوی تولد", parent: '1',),
-    Todo("کیک شکلاتی", parent: '1', isCompleted: 1),
-    Todo("۲۰ دراز نشست", parent: '2',),
-    Todo("پلانک", parent: '2',),
-    Todo("۱۵ دقیقه دویدن", parent: '2',),
+    Todo("سبزیجات", DateTimeUtils.getToday(), parent: '1',),
+    Todo("کادوی تولد", DateTimeUtils.getToday(), parent: '1',),
+    Todo("کیک شکلاتی", DateTimeUtils.getToday(), parent: '1', isCompleted: 1),
+    Todo("۲۰ دراز نشست", DateTimeUtils.getToday(), parent: '2',),
+    Todo("پلانک", DateTimeUtils.getToday(), parent: '2',),
+    Todo("۱۵ دقیقه دویدن", DateTimeUtils.getToday(), parent: '2',),
   ];
 
   var tasks = [
@@ -59,6 +60,7 @@ class DBProvider {
           "id TEXT PRIMARY KEY,"
           "name TEXT,"
           "parent TEXT,"
+          "date TEXT,"
           "completed INTEGER NOT NULL DEFAULT 0"
           ")");
     });
